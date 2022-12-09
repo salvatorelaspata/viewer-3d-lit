@@ -95,6 +95,7 @@ const loadFBX = (path, fileName) => new Promise((resolve, reject) => {
 });
 export const loadModel = (object) => {
     // check if the object is type of Object3D
+    console.log('loadModel');
     if (object instanceof THREE.Object3D)
         return Promise.resolve(object);
     if (!!object) {

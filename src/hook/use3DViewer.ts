@@ -5,7 +5,7 @@ import { Viewer3dType } from '../types/types.js'
 // import { catalog } from "../config/catalog";
 // import { actions } from "../store/store";
 
-import { loadBackground, loadModel, loadTexture } from './useLoader.js'
+import { loadBackground, loadModel, loadTexture } from './useLoader'
 
 const _WIDTH = window.innerWidth // * 0.9
 const _HEIGHT = window.innerHeight // * 0.9
@@ -122,14 +122,13 @@ export const use3DViewer = async (
   mount: HTMLDivElement | undefined,
   modelConfig: Viewer3dType
 ) => {
-  console.log('use3DViewer', mount, modelConfig)
   const { object, background, texture: t } = modelConfig
   const [obj, hdrEquirect, texture] = await Promise.all([
     loadModel(object), // 3d model
     loadBackground(background), // hdrEquirect
     loadTexture(t), // texture for 3d model
   ])
-  console.log('use3DViewer', obj, hdrEquirect, texture)
+  debugger
   // apply random mesh color to object model
   applyTextureOnMesh(obj, hdrEquirect, texture)
   // create and configure renderer
@@ -150,7 +149,6 @@ export const use3DViewer = async (
   scene.background = hdrEquirect
 
   // LUCE
-  console.log(scene.background)
   if (!(scene.background instanceof THREE.DataTexture)) {
     const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
     const light2 = new THREE.AmbientLight(0x404040)

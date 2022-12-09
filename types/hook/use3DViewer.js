@@ -90,12 +90,14 @@ export const applyTextureOnMesh = (obj, hdrEquirect, texture) => {
         });
 };
 export const use3DViewer = async (mount, modelConfig) => {
+    console.log('use3DViewer', mount, modelConfig);
     const { object, background, texture: t } = modelConfig;
     const [obj, hdrEquirect, texture] = await Promise.all([
         loadModel(object),
         loadBackground(background),
         loadTexture(t), // texture for 3d model
     ]);
+    console.log('use3DViewer', obj, hdrEquirect, texture);
     // apply random mesh color to object model
     applyTextureOnMesh(obj, hdrEquirect, texture);
     // create and configure renderer

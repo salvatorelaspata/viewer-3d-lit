@@ -34,8 +34,8 @@ const loadRGBE: _loadRGBEType = (path, fileName) =>
         },
         xhr => {
           if (xhr.lengthComputable) {
-            const percentComplete = (xhr.loaded / xhr.total) * 100
-            console.log('RGBE', Math.round(percentComplete) + '% downloaded')
+            // const percentComplete = (xhr.loaded / xhr.total) * 100
+            // console.log('RGBE', Math.round(percentComplete) + '% downloaded')
           }
         }
       )
@@ -53,8 +53,8 @@ const loadObj: _loadObjType = (path, fileName) =>
       },
       xhr => {
         if (xhr.lengthComputable) {
-          const percentComplete = (xhr.loaded / xhr.total) * 100
-          console.log('Obj', Math.round(percentComplete) + '% downloaded')
+          // const percentComplete = (xhr.loaded / xhr.total) * 100
+          // console.log('Obj', Math.round(percentComplete) + '% downloaded')
         }
       },
       err => {
@@ -72,8 +72,8 @@ const loadObjectJSON: _loadObjectType = (path, fileName) =>
       },
       xhr => {
         if (xhr.lengthComputable) {
-          const percentComplete = (xhr.loaded / xhr.total) * 100
-          console.log('Object', Math.round(percentComplete) + '% downloaded')
+          // const percentComplete = (xhr.loaded / xhr.total) * 100
+          // console.log('Object', Math.round(percentComplete) + '% downloaded')
         }
       },
       err => {
@@ -91,8 +91,8 @@ const loadAsyncTexture: _loadAsyncTextureType = (path, fileName) =>
       },
       xhr => {
         if (xhr.lengthComputable) {
-          const percentComplete = (xhr.loaded / xhr.total) * 100
-          console.log('Texture', Math.round(percentComplete) + '% downloaded')
+          // const percentComplete = (xhr.loaded / xhr.total) * 100
+          // console.log('Texture', Math.round(percentComplete) + '% downloaded')
         }
       },
       err => {
@@ -132,8 +132,8 @@ const loadFBX: _loadFBXType = (path, fileName) =>
       },
       xhr => {
         if (xhr.lengthComputable) {
-          const percentComplete = (xhr.loaded / xhr.total) * 100
-          console.log('FBX', Math.round(percentComplete) + '% downloaded')
+          // const percentComplete = (xhr.loaded / xhr.total) * 100
+          // console.log('FBX', Math.round(percentComplete) + '% downloaded')
         }
       },
       err => {
@@ -144,7 +144,6 @@ const loadFBX: _loadFBXType = (path, fileName) =>
 
 export const loadModel = (object: ObjectConfig) => {
   // check if the object is type of Object3D
-  debugger
   if (object instanceof THREE.Object3D) return Promise.resolve(object)
   if (!!object) {
     const { type, path, fileName } = object
