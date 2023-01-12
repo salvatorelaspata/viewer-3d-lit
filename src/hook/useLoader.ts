@@ -2,6 +2,8 @@ import * as THREE from 'three'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
+import { USDZLoader } from 'three/examples/jsm/loaders/USDZLoader.js'
+
 import {
   BackgroundConfig,
   ObjectConfig,
@@ -17,6 +19,7 @@ const manager = new THREE.LoadingManager()
 const objLoader = new OBJLoader(manager)
 const objectLoader = new THREE.ObjectLoader()
 const fbxLoader = new FBXLoader()
+const usdzLoader = new USDZLoader()
 const textureLoader = new THREE.TextureLoader(manager)
 
 manager.onProgress = function (item, loaded, total) {
@@ -74,6 +77,25 @@ const loadObjectJSON: _loadObjectType = (path, fileName) =>
         if (xhr.lengthComputable) {
           // const percentComplete = (xhr.loaded / xhr.total) * 100
           // console.log('Object', Math.round(percentComplete) + '% downloaded')
+        }
+      },
+      err => {
+        rej(err)
+      }
+    )
+  })
+
+const loadUSDZ = (path, fileName) =>
+  new Promise((res, rej) => {
+    usdzLoader.load(
+      `${path}${fileName}`,
+      function (obj) {
+        res(obj)
+      },
+      xhr => {
+        if (xhr.lengthComputable) {
+          // const percentComplete = (xhr.loaded / xhr.total) * 100
+          // console.log('USDZ', Math.round(percentComplete) + '% downloaded')
         }
       },
       err => {
@@ -151,7 +173,11 @@ export const loadModel = (object: ObjectConfig) => {
       ? loadObj(path, fileName)
       : object.type === 'json'
       ? loadObjectJSON(path, fileName)
-      : loadFBX(path, fileName)
+      : object.type === 'fbx'
+      ? loadFBX(path, fileName)
+      : object.type === 'usdz'
+      ? (loadUSDZ(path, fileName) as Promise<THREE.Group>)
+      : Promise.reject(new Error('Object type is not supported'))
   } else throw new Error('Object is not defined')
 }
 

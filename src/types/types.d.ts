@@ -1,4 +1,4 @@
-export type type3D = 'obj' | 'fbx' | 'json'
+export type type3D = 'obj' | 'fbx' | 'json' | 'usdz'
 // VIEWER
 export type ObjectConfig =
   | {

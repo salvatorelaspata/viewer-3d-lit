@@ -9,7 +9,7 @@ export class Viewer3d extends LitElement {
   // the path is local or remote
   // if texture is not defined, a default texture is applied (generateTexture)
   @property({ type: String })
-  object = '/models/obj/PignaOC.obj'
+  object = '/models/usdz/test2_medium__unordered__normal.usdz'
   @property({ type: String })
   texture = '/models/textures/PignaOC.png'
   @property({ type: String })
@@ -32,14 +32,12 @@ export class Viewer3d extends LitElement {
 
   // React - componentDidMount | useEffect
   override firstUpdated() {
-    console.log('***AAA***', this.object, this.texture, this.background)
     const aUse = async () => {
-      console.log('aUuse')
       const { obj, hdrEquirect, texture } = await use3DViewer(this.mount, {
         object: {
           path: this.object,
           fileName: '',
-          type: this._getExtension(this.object), // fbx, obj, json
+          type: this._getExtension(this.object),
         },
         texture: {
           path: this.texture,
@@ -61,6 +59,7 @@ export class Viewer3d extends LitElement {
     if (extension === 'obj') return 'obj'
     if (extension === 'fbx') return 'fbx'
     if (extension === 'json') return 'json'
+    if (extension === 'usdz') return 'usdz'
     else throw new Error('Extension not supported')
   }
 

@@ -128,7 +128,7 @@ export const use3DViewer = async (
     loadBackground(background), // hdrEquirect
     loadTexture(t), // texture for 3d model
   ])
-  debugger
+
   // apply random mesh color to object model
   applyTextureOnMesh(obj, hdrEquirect, texture)
   // create and configure renderer
