@@ -2,10 +2,12 @@ import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+import { USDZLoader } from 'three/examples/jsm/loaders/USDZLoader.js';
 const manager = new THREE.LoadingManager();
 const objLoader = new OBJLoader(manager);
 const objectLoader = new THREE.ObjectLoader();
 const fbxLoader = new FBXLoader();
+const usdzLoader = new USDZLoader();
 const textureLoader = new THREE.TextureLoader(manager);
 manager.onProgress = function (item, loaded, total) {
     console.log(item, loaded, total);
@@ -17,8 +19,8 @@ const loadRGBE = (path, fileName) => new Promise((resolve, reject) => {
             resolve(hdrEquirect);
         }, xhr => {
             if (xhr.lengthComputable) {
-                const percentComplete = (xhr.loaded / xhr.total) * 100;
-                console.log('RGBE', Math.round(percentComplete) + '% downloaded');
+                // const percentComplete = (xhr.loaded / xhr.total) * 100
+                // console.log('RGBE', Math.round(percentComplete) + '% downloaded')
             }
         });
     }
@@ -31,8 +33,8 @@ const loadObj = (path, fileName) => new Promise((resolve, reject) => {
         resolve(obj);
     }, xhr => {
         if (xhr.lengthComputable) {
-            const percentComplete = (xhr.loaded / xhr.total) * 100;
-            console.log('Obj', Math.round(percentComplete) + '% downloaded');
+            // const percentComplete = (xhr.loaded / xhr.total) * 100
+            // console.log('Obj', Math.round(percentComplete) + '% downloaded')
         }
     }, err => {
         reject(err);
@@ -43,8 +45,20 @@ const loadObjectJSON = (path, fileName) => new Promise((res, rej) => {
         res(obj);
     }, xhr => {
         if (xhr.lengthComputable) {
-            const percentComplete = (xhr.loaded / xhr.total) * 100;
-            console.log('Object', Math.round(percentComplete) + '% downloaded');
+            // const percentComplete = (xhr.loaded / xhr.total) * 100
+            // console.log('Object', Math.round(percentComplete) + '% downloaded')
+        }
+    }, err => {
+        rej(err);
+    });
+});
+const loadUSDZ = (path, fileName) => new Promise((res, rej) => {
+    usdzLoader.load(`${path}${fileName}`, function (obj) {
+        res(obj);
+    }, xhr => {
+        if (xhr.lengthComputable) {
+            // const percentComplete = (xhr.loaded / xhr.total) * 100
+            // console.log('USDZ', Math.round(percentComplete) + '% downloaded')
         }
     }, err => {
         rej(err);
@@ -55,8 +69,8 @@ const loadAsyncTexture = (path, fileName) => new Promise((resolve, reject) => {
         resolve(texture);
     }, xhr => {
         if (xhr.lengthComputable) {
-            const percentComplete = (xhr.loaded / xhr.total) * 100;
-            console.log('Texture', Math.round(percentComplete) + '% downloaded');
+            // const percentComplete = (xhr.loaded / xhr.total) * 100
+            // console.log('Texture', Math.round(percentComplete) + '% downloaded')
         }
     }, err => {
         reject(err);
@@ -86,8 +100,8 @@ const loadFBX = (path, fileName) => new Promise((resolve, reject) => {
         resolve(fbx);
     }, xhr => {
         if (xhr.lengthComputable) {
-            const percentComplete = (xhr.loaded / xhr.total) * 100;
-            console.log('FBX', Math.round(percentComplete) + '% downloaded');
+            // const percentComplete = (xhr.loaded / xhr.total) * 100
+            // console.log('FBX', Math.round(percentComplete) + '% downloaded')
         }
     }, err => {
         reject(err);
@@ -95,7 +109,6 @@ const loadFBX = (path, fileName) => new Promise((resolve, reject) => {
 });
 export const loadModel = (object) => {
     // check if the object is type of Object3D
-    console.log('loadModel');
     if (object instanceof THREE.Object3D)
         return Promise.resolve(object);
     if (!!object) {
@@ -104,7 +117,11 @@ export const loadModel = (object) => {
             ? loadObj(path, fileName)
             : object.type === 'json'
                 ? loadObjectJSON(path, fileName)
-                : loadFBX(path, fileName);
+                : object.type === 'fbx'
+                    ? loadFBX(path, fileName)
+                    : object.type === 'usdz'
+                        ? loadUSDZ(path, fileName)
+                        : Promise.reject(new Error('Object type is not supported'));
     }
     else
         throw new Error('Object is not defined');

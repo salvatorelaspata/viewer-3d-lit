@@ -9,7 +9,7 @@ export class Viewer3d extends LitElement {
   // the path is local or remote
   // if texture is not defined, a default texture is applied (generateTexture)
   @property({ type: String })
-  object = '/models/usdz/test2_medium__unordered__normal.usdz'
+  object = '/models/obj/PignaOC.obj'
   @property({ type: String })
   texture = '/models/textures/PignaOC.png'
   @property({ type: String })

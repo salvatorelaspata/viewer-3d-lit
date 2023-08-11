@@ -26,14 +26,12 @@ let Viewer3d = class Viewer3d extends LitElement {
     }
     // React - componentDidMount | useEffect
     firstUpdated() {
-        console.log('***AAA***', this.object, this.texture, this.background);
         const aUse = async () => {
-            console.log('aUuse');
             const { obj, hdrEquirect, texture } = await use3DViewer(this.mount, {
                 object: {
                     path: this.object,
                     fileName: '',
-                    type: this._getExtension(this.object), // fbx, obj, json
+                    type: this._getExtension(this.object),
                 },
                 texture: {
                     path: this.texture,
@@ -58,6 +56,8 @@ let Viewer3d = class Viewer3d extends LitElement {
             return 'fbx';
         if (extension === 'json')
             return 'json';
+        if (extension === 'usdz')
+            return 'usdz';
         else
             throw new Error('Extension not supported');
     }

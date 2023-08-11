@@ -11,7 +11,7 @@ export declare class Viewer3d extends LitElement {
     };
     isLoaded: boolean;
     firstUpdated(): void;
-    _getExtension(path: string): "json" | "obj" | "fbx";
+    _getExtension(path: string): "json" | "obj" | "fbx" | "usdz";
     onClickViewer(e: MouseEvent): void;
     render(): import("lit-html").TemplateResult<1>;
     static styles: import("lit").CSSResult;
