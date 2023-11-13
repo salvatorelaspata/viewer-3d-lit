@@ -9,11 +9,11 @@ export class Viewer3d extends LitElement {
   // the path is local or remote
   // if texture is not defined, a default texture is applied (generateTexture)
   @property({ type: String })
-  object = '/models/obj/PignaOC.obj'
+  object = ''
   @property({ type: String })
-  texture = '/models/textures/PignaOC.png'
+  texture = ''
   @property({ type: String })
-  background = '/models/textures/studio_small_09_4k.hdr'
+  background = ''
 
   // React - useRef
   @query('#viewer')
@@ -31,7 +31,7 @@ export class Viewer3d extends LitElement {
   isLoaded = false
 
   // React - componentDidMount | useEffect
-  override firstUpdated() {
+  override firstUpdated () {
     const aUse = async () => {
       const { obj, hdrEquirect, texture } = await use3DViewer(this.mount, {
         object: {
@@ -54,8 +54,9 @@ export class Viewer3d extends LitElement {
     aUse()
   }
 
-  _getExtension(path: string) {
-    const extension = path.split('.').pop()?.toLocaleLowerCase()
+  _getExtension (path: string) {
+    const _path = path.split('?')[0] // remove query string
+    const extension = _path.split('.').pop()?.toLocaleLowerCase()
     if (extension === 'obj') return 'obj'
     if (extension === 'fbx') return 'fbx'
     if (extension === 'json') return 'json'
@@ -63,7 +64,7 @@ export class Viewer3d extends LitElement {
     else throw new Error('Extension not supported')
   }
 
-  onClickViewer(e: MouseEvent) {
+  onClickViewer (e: MouseEvent) {
     e.stopPropagation()
     const { obj, hdrEquirect, texture } = this.scene
     this.dispatchEvent(
@@ -78,7 +79,7 @@ export class Viewer3d extends LitElement {
     )
   }
 
-  override render() {
+  override render () {
     console.log('isLoaded', this.isLoaded)
     return html`<div
         class=${classMap({ hidden: !this.isLoaded })}

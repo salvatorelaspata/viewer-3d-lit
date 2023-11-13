@@ -13,9 +13,9 @@ let Viewer3d = class Viewer3d extends LitElement {
         super(...arguments);
         // the path is local or remote
         // if texture is not defined, a default texture is applied (generateTexture)
-        this.object = '/models/obj/PignaOC.obj';
-        this.texture = '/models/textures/PignaOC.png';
-        this.background = '/models/textures/studio_small_09_4k.hdr';
+        this.object = '';
+        this.texture = '';
+        this.background = '';
         // React - useState
         this.scene = {
             obj: null,
@@ -49,7 +49,8 @@ let Viewer3d = class Viewer3d extends LitElement {
     }
     _getExtension(path) {
         var _a;
-        const extension = (_a = path.split('.').pop()) === null || _a === void 0 ? void 0 : _a.toLocaleLowerCase();
+        const _path = path.split('?')[0]; // remove query string
+        const extension = (_a = _path.split('.').pop()) === null || _a === void 0 ? void 0 : _a.toLocaleLowerCase();
         if (extension === 'obj')
             return 'obj';
         if (extension === 'fbx')
