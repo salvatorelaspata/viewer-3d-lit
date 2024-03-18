@@ -7,10 +7,6 @@ import { Viewer3dType } from '../types/types.js'
 
 import { loadBackground, loadModel, loadTexture } from './useLoader'
 
-const _WIDTH = window.innerWidth // * 0.9
-const _HEIGHT = window.innerHeight // * 0.9
-const _ASPECT_RATIO = _WIDTH / _HEIGHT
-
 let camera: THREE.PerspectiveCamera,
   scene: THREE.Scene,
   controls: OrbitControls,
@@ -65,9 +61,9 @@ const _createMaterial = (
 }
 
 const _onWindowResize = () => {
-  // console.log("_onWindowResize", _WIDTH, _HEIGHT);
-  const width = window.innerWidth // * 0.9
-  const height = window.innerHeight // * 0.9
+  const width = document.body.clientWidth
+  const height = window.innerHeight
+  console.log("_onWindowResize", width, height);
 
   camera.aspect = width / height
   camera.updateProjectionMatrix()
@@ -84,17 +80,23 @@ const _managePosition = (
   const boundingBox = new THREE.Box3().setFromObject(obj)
   // console.log(boundingBox)
   const {
-    min: { x: minX, y: minY, z: minZ },
-    max: { x: maxX, y: maxY, z: maxZ },
+    min: { 
+      // x: minX, 
+      y: minY, 
+      // z: minZ 
+    },
+    max: { x: maxX, y: maxY, 
+      // z: maxZ
+    },
   } = boundingBox
-  const deltaX = (maxX - minX) / 2
+  // const deltaX = (maxX - minX) / 2
   const deltaY = (maxY - minY) / 2
-  const deltaZ = (maxZ - minZ) / 2
-  console.log(deltaX, deltaY, deltaZ, deltaY < 1)
+  // const deltaZ = (maxZ - minZ) / 2
+
   // set obj position
   obj.rotation.set(0, 0, 0)
-  obj.position.set(0, deltaY < 1 ? 0 : -deltaY, 0)
-  camera.position.set(maxX + maxX * 3, 0, 0) // x, y, z
+  obj.position.set(0, -deltaY, 0)
+  camera.position.set(maxX * 6, 0, 0) // x, y, z
   controls.target = new THREE.Vector3(0, 0, 0)
 }
 
@@ -134,7 +136,7 @@ export const use3DViewer = async (
   // create and configure renderer
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
-  renderer.setSize(_WIDTH, _HEIGHT)
+  renderer.setSize(document.body.clientWidth, window.innerHeight)
   renderer.shadowMap.enabled = true
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1
@@ -144,7 +146,7 @@ export const use3DViewer = async (
   // create scene
   scene = new THREE.Scene()
   // create camera
-  camera = new THREE.PerspectiveCamera(75, _ASPECT_RATIO, 0.1, 1000)
+  camera = new THREE.PerspectiveCamera(75, document.body.clientWidth / window.innerHeight, 0.1, 1000)
   // set texture environment mapping
   scene.background = hdrEquirect
 
@@ -169,8 +171,9 @@ export const use3DViewer = async (
     controls.update()
     renderer.render(scene, camera)
   }
+  // loop
   renderAndAnimate()
+  // resize listener
   window.addEventListener('resize', _onWindowResize)
-
   return { obj, hdrEquirect, texture }
 }

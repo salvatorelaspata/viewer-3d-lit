@@ -109,8 +109,9 @@ export class Viewer3d extends LitElement {
       display: none;
     }
     .bg-loader {
+      position: relative;
       background-color: #000;
-      width: 100vw;
+      width: 100wv;
       height: 100vh;
       z-index: 999;
     }
