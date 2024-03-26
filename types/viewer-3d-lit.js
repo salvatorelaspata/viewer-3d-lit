@@ -8,6 +8,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { applyTextureOnMesh, use3DViewer } from './hook/use3DViewer.js';
+import { useLoaderCanvas } from './hook/useLoaderCanvas.js';
 let Viewer3d = class Viewer3d extends LitElement {
     constructor() {
         super(...arguments);
@@ -26,6 +27,7 @@ let Viewer3d = class Viewer3d extends LitElement {
     }
     // React - componentDidMount | useEffect
     firstUpdated() {
+        useLoaderCanvas(this.loader);
         const aUse = async () => {
             const { obj, hdrEquirect, texture } = await use3DViewer(this.mount, {
                 object: {
@@ -77,12 +79,15 @@ let Viewer3d = class Viewer3d extends LitElement {
         @click=${this.onClickViewer}
         id="viewer"
       ></div>
-      <!-- Integrare percentuale -->
+      <canvas id="loader" class="${classMap({ hidden: this.isLoaded })}" ></canvas>
+      <!-- 
       <div class="${classMap({ hidden: this.isLoaded })} bg-loader">
         <div class="${classMap({ hidden: this.isLoaded })} loader">
           loading...
         </div>
-      </div>`;
+      </div>
+      -->
+      `;
     }
 };
 Viewer3d.styles = css `
@@ -139,6 +144,9 @@ __decorate([
 __decorate([
     query('#viewer')
 ], Viewer3d.prototype, "mount", void 0);
+__decorate([
+    query('#loader')
+], Viewer3d.prototype, "loader", void 0);
 __decorate([
     property({ type: Object, state: true })
 ], Viewer3d.prototype, "scene", void 0);

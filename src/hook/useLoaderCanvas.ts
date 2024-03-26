@@ -140,7 +140,7 @@ const composeScene = (scene: THREE.Scene) => {
 
 export const useLoaderCanvas = (loader: HTMLCanvasElement | undefined) => {
 
-    const WIDTH = window.innerWidth
+    const WIDTH = document.body.clientWidth
     const HEIGHT = window.innerHeight
 
     console.log('Scene - useEffect')
@@ -176,9 +176,9 @@ export const useLoaderCanvas = (loader: HTMLCanvasElement | undefined) => {
     function onWindowResize() {
         console.log('onWindowResize')
 
-        camera.aspect = window.innerWidth / window.innerHeight 
+        camera.aspect = document.body.clientWidth / window.innerHeight 
         camera.updateProjectionMatrix()
-        renderer.setSize(window.innerWidth, window.innerHeight)
+        renderer.setSize(document.body.clientWidth, window.innerHeight)
         render()
     }
 

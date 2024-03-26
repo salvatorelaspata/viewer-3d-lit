@@ -4,6 +4,7 @@ export declare class Viewer3d extends LitElement {
     texture: string;
     background: string;
     mount: HTMLDivElement | undefined;
+    loader: HTMLCanvasElement | undefined;
     scene: {
         obj: unknown;
         hdrEquirect: unknown;

@@ -127,6 +127,11 @@ export const use3DViewer = async (mount, modelConfig) => {
     scene.add(obj);
     // orbit controls
     controls = new OrbitControls(camera, renderer.domElement);
+    controls.minDistance = 0;
+    controls.maxDistance = 100;
+    controls.enablePan = false;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
     // settings camera and objec position
     _managePosition(obj, camera, controls);
     // ANIMATE
