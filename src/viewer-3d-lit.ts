@@ -3,6 +3,7 @@ import { LitElement, html, css } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { applyTextureOnMesh, use3DViewer } from './hook/use3DViewer.js'
+import { useLoaderCanvas } from './hook/useLoaderCanvas.js'
 
 @customElement('viewer-3d-lit')
 export class Viewer3d extends LitElement {
@@ -19,6 +20,9 @@ export class Viewer3d extends LitElement {
   @query('#viewer')
   mount: HTMLDivElement | undefined
 
+  @query('#loader')
+  loader: HTMLCanvasElement | undefined
+
   // React - useState
   @property({ type: Object, state: true })
   scene: { obj: unknown; hdrEquirect: unknown; texture: unknown } = {
@@ -32,6 +36,7 @@ export class Viewer3d extends LitElement {
 
   // React - componentDidMount | useEffect
   override firstUpdated () {
+    useLoaderCanvas(this.loader);
     const aUse = async () => {
       const { obj, hdrEquirect, texture } = await use3DViewer(this.mount, {
         object: {
@@ -86,12 +91,15 @@ export class Viewer3d extends LitElement {
         @click=${this.onClickViewer}
         id="viewer"
       ></div>
-      <!-- Integrare percentuale -->
+      <canvas id="loader" class="${classMap({ hidden: this.isLoaded })}" ></canvas>
+      <!-- 
       <div class="${classMap({ hidden: this.isLoaded })} bg-loader">
         <div class="${classMap({ hidden: this.isLoaded })} loader">
           loading...
         </div>
-      </div>`
+      </div>
+      -->
+      `
   }
 
   static override styles = css`
