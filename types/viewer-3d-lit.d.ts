@@ -11,6 +11,7 @@ export declare class Viewer3d extends LitElement {
         texture: unknown;
     };
     isLoaded: boolean;
+    constructor();
     firstUpdated(): void;
     _getExtension(path: string): "json" | "obj" | "fbx" | "usdz";
     onClickViewer(e: MouseEvent): void;

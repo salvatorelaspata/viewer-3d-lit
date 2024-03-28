@@ -8,10 +8,9 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { applyTextureOnMesh, use3DViewer } from './hook/use3DViewer.js';
-import { useLoaderCanvas } from './hook/useLoaderCanvas.js';
 let Viewer3d = class Viewer3d extends LitElement {
     constructor() {
-        super(...arguments);
+        super();
         // the path is local or remote
         // if texture is not defined, a default texture is applied (generateTexture)
         this.object = '';
@@ -25,9 +24,13 @@ let Viewer3d = class Viewer3d extends LitElement {
         };
         this.isLoaded = false;
     }
-    // React - componentDidMount | useEffect
     firstUpdated() {
-        useLoaderCanvas(this.loader);
+        import('viewer-3d-lit-loader/dist/viewer-3d-lit-loader.js');
+        const loader = document.createElement('viewer-3d-lit-loader');
+        loader.color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+        loader.width = document.body.clientWidth;
+        loader.height = window.innerHeight;
+        this.loader && this.loader.appendChild(loader);
         const aUse = async () => {
             const { obj, hdrEquirect, texture } = await use3DViewer(this.mount, {
                 object: {
@@ -74,20 +77,9 @@ let Viewer3d = class Viewer3d extends LitElement {
     }
     render() {
         console.log('isLoaded', this.isLoaded);
-        return html `<div
-        class=${classMap({ hidden: !this.isLoaded })}
-        @click=${this.onClickViewer}
-        id="viewer"
-      ></div>
-      <canvas id="loader" class="${classMap({ hidden: this.isLoaded })}" ></canvas>
-      <!-- 
-      <div class="${classMap({ hidden: this.isLoaded })} bg-loader">
-        <div class="${classMap({ hidden: this.isLoaded })} loader">
-          loading...
-        </div>
-      </div>
-      -->
-      `;
+        return html `<div id="viewer" class=${classMap({ hidden: !this.isLoaded })}
+        @click=${this.onClickViewer}></div>
+        <div id="loader" class=${classMap({ hidden: this.isLoaded })}></div>`;
     }
 };
 Viewer3d.styles = css `
