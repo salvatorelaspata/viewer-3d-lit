@@ -3,7 +3,7 @@ import { LitElement, html, css } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { applyTextureOnMesh, use3DViewer } from './hook/use3DViewer.js'
-import { useLoaderCanvas } from './hook/useLoaderCanvas.js'
+
 
 @customElement('viewer-3d-lit')
 export class Viewer3d extends LitElement {
@@ -34,9 +34,20 @@ export class Viewer3d extends LitElement {
   @property({ type: Boolean, state: true })
   isLoaded = false
 
-  // React - componentDidMount | useEffect
+  constructor () {
+    super()
+  }
+
   override firstUpdated () {
-    useLoaderCanvas(this.loader);
+
+    
+    import('viewer-3d-lit-loader/dist/viewer-3d-lit-loader.js');
+    const loader = document.createElement('viewer-3d-lit-loader') as HTMLCanvasElement & { color: string }
+    loader.color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    loader.width = document.body.clientWidth;
+    loader.height = window.innerHeight;
+    this.loader && this.loader.appendChild(loader)
+
     const aUse = async () => {
       const { obj, hdrEquirect, texture } = await use3DViewer(this.mount, {
         object: {
@@ -86,20 +97,9 @@ export class Viewer3d extends LitElement {
 
   override render () {
     console.log('isLoaded', this.isLoaded)
-    return html`<div
-        class=${classMap({ hidden: !this.isLoaded })}
-        @click=${this.onClickViewer}
-        id="viewer"
-      ></div>
-      <canvas id="loader" class="${classMap({ hidden: this.isLoaded })}" ></canvas>
-      <!-- 
-      <div class="${classMap({ hidden: this.isLoaded })} bg-loader">
-        <div class="${classMap({ hidden: this.isLoaded })} loader">
-          loading...
-        </div>
-      </div>
-      -->
-      `
+    return html`<div id="viewer" class=${classMap({ hidden: !this.isLoaded })}
+        @click=${this.onClickViewer}></div>
+        <div id="loader" class=${classMap({ hidden: this.isLoaded })}></div>`
   }
 
   static override styles = css`

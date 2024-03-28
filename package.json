@@ -27,9 +27,9 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "gsap": "^3.12.5",
     "lit": "^2.4.0",
-    "three": "^0.148.0"
+    "three": "^0.148.0",
+    "viewer-3d-lit-loader": "^0.0.1"
   },
   "devDependencies": {
     "@types/three": "^0.146.0",
